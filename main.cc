@@ -6,6 +6,7 @@
 
 #include "scene.h"
 #include "mouse.h"
+#include "keyboard.h"
 #include <cstdio>
 #include <string>
 #include <cstring>
@@ -63,8 +64,8 @@ int main(int argc, char **argv) {
     glutInitWindowPosition(0,0);
     glutCreateWindow("Sorin's Network Animator");
 //    glutFullscreen();
-//    glutKeyboradFunc(Keyboard::Down);
-//    glutKeyboradUpFunc(Keyboard::Up);
+    glutKeyboardFunc(Keyboard::Down);
+    glutKeyboardUpFunc(Keyboard::Up);
     glutMouseFunc(Mouse::Button);
     glutMotionFunc(Mouse::Motion);
     glutPassiveMotionFunc(Mouse::Motion);

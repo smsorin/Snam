@@ -15,7 +15,7 @@ class Layout {
     Layout();
 
     void setNodes(const std::map<int, Node*>&);
-    void setLinks(const std::vector<Link*>&);
+    void setLinks(const std::map<std::pair<int, int>, Link*>&);
 
     void recompute();
   private:

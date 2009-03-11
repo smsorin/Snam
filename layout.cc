@@ -12,18 +12,12 @@ void Layout::setNodes(const std::map<int,Node*>& nodes) {
     nodes_ = nodes;
 }
 
-void Layout::setLinks(const std::vector<Link*>& links) {
-    links_.clear();
-    for (unsigned int i = 0; i < links.size(); ++i) {
-        links_.insert(std::pair<std::pair<int, int>, Link*>(
-                    std::pair<int, int>(links[i]->getFrom().getId(),
-                                        links[i]->getTo().getId()),
-                    links[i]));
-    }
+void Layout::setLinks(const std::map<std::pair<int, int>, Link*>& links) {
+    links_ = links;
 }
 
 void Layout::recompute() {
-    printf("Rendering new layout...\n");
+    printf("Rendering new layout...");
     char* aux = new char[100];
     static const char* name_template = "/tmp/snam.tmp.XXXXXX";
     strcpy(aux, name_template);
@@ -63,10 +57,13 @@ void Layout::readGraphVizOutput(const std::string& fileName) {
             // irelevant
         } else if (strcmp(token, "node") == 0) {
             int id = atol(strtok(NULL, " ")); 
-            double x,y;
+            double x,y, width, height;
             sscanf(strtok(NULL, " "), "%lf", &x);
             sscanf(strtok(NULL, " "), "%lf", &y);
+            sscanf(strtok(NULL, " "), "%lf", &width);
+            sscanf(strtok(NULL, " "), "%lf", &height);
             nodes_[id]->setLocation(Vector3(x, y, 0.001));
+            nodes_[id]->setExtent(Vector3(width, height, 0.001));
         } else if (strcmp(token, "edge") == 0) {
             int from_id = atol(strtok(NULL, " "));
             int to_id = atol(strtok(NULL, " "));

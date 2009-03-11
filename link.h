@@ -5,6 +5,8 @@
 
 #include <vector>
 #include "vector3.h"
+#include "message.h"
+#include <set>
 
 class Node;
 
@@ -14,23 +16,36 @@ class Link {
     ~Link();
     const Node& getFrom() const;
     const Node& getTo() const;
+    int getCapacity() const;
+    void setCapacity(int capacity);
+    double getDelay() const;
+    void setDelay(double delay);
 
-    void Draw() const;
+    void Draw(double time) const;
     
     /* control Points mentance */
     void updateGeometry();
     void clearControlPoints();
     void addControlPoint(const Vector3&);
+
+    /* message members */
+    void addForwardMessage(const Message&);
+    void addReverseMessage(const Message&);
   private:          
     Link(const Link&);
     Link& operator=(const Link&);
 
+    std::multiset<Message> forward_stream, reverse_stream;
     mutable std::vector<Vector3> controlPoints;
+    mutable std::vector<double> run_length;
     mutable float *geometry;
+    mutable double length_;
 
     void setGeometryVertex(int pos, const Vector3& loc) const;
     void generateGeometry() const;
 
+    int capacity_;
+    double delay_;
     const Node& from_;
     const Node& to_;
 };

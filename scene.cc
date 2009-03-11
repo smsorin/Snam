@@ -5,11 +5,20 @@
 #include "link.h"
 #include "mouse.h"
 #include "layout.h"
+#include "consts.h"
+#include "keyboard.h"
 #include <GL/gl.h>
 #include <GL/glut.h>
 #include <cmath>
 
+using std::map;
+using std::pair;
+
 Scene::Scene(const std::string& fileName) {
+    current_time_ = 0;
+    end_time_ = 0;
+    pause = false;
+    time_coefficient_ = 1;
     LoadGraph(fileName);
     layout_ = new Layout();
     layout_->setNodes(nodes_);
@@ -20,11 +29,12 @@ Scene::Scene(const std::string& fileName) {
 Scene::~Scene() {
     delete layout_;
     layout_ = NULL;
-    for (unsigned int i = 0; i < links_.size(); ++i) {
-        delete links_[i];
+    for (map<pair<int, int>, Link*>::iterator it = links_.begin();
+            it != links_.end(); ++it) {
+        delete it->second;
     }
     links_.clear();
-    for (std::map<int, Node*>::iterator it = nodes_.begin();
+    for (map<int, Node*>::iterator it = nodes_.begin();
             it != nodes_.end(); ++it) {
         delete it->second;
     }
@@ -35,6 +45,11 @@ const Vector3& Scene::getCamera() const { return camera_; }
 
 void Scene::setCamera(const Vector3& newPos) {
     camera_ = newPos;
+}
+
+void Scene::printStatus() const {
+    printf("%s current time: %lf speed: %lf \n",(pause? "paused" : "playing"),
+           current_time_, time_coefficient_);
 }
 
 void Scene::Tick(double delta) {
@@ -61,16 +76,71 @@ void Scene::Tick(double delta) {
         last_mouse_pos = Mouse::pos;
     } 
     last_left_state = Mouse::left;
-    // TODO:  animate stuff
+
+    // keyboard functions...
+    static bool last_space = false;
+    static bool last_double_speed = false;
+    static bool last_half_speed = false;
+    static bool last_faster = false;
+    static bool last_slower = false;
+    static bool last_reverse = false;
+    if (Keyboard::key[' '] ^ last_space) {
+        if (last_space) {
+            pause = !pause;
+            printStatus();
+        }
+        last_space = Keyboard::key[' '];
+    }
+    if (Keyboard::key['r'] || Keyboard::key['R']) time_coefficient_ = 1;
+    if (Keyboard::key['}'] ^ last_double_speed) {
+        time_coefficient_ *= last_double_speed ? 1: 2;
+        last_double_speed = Keyboard::key['}'];
+    }
+    if (Keyboard::key['{'] ^ last_half_speed) {
+        time_coefficient_ /= last_half_speed ? 1 : 2;
+        last_half_speed = Keyboard::key['{'];
+    }
+    if (Keyboard::key[']'] ^ last_faster) {
+        time_coefficient_ *= last_faster ? 1: 1.1;
+        last_faster = Keyboard::key[']'];
+    }
+    if (Keyboard::key['['] ^ last_slower) {
+        time_coefficient_ /= last_slower ? 1 : 1.1;
+        last_slower = Keyboard::key['['];
+    }
+    if (Keyboard::key[GLUT_KEY_DOWN]) current_time_ -= 60.0;
+    if (Keyboard::key[GLUT_KEY_UP]) current_time_ += 60.0;
+    if (Keyboard::key[GLUT_KEY_LEFT]) current_time_ += 10.0;
+    if (Keyboard::key[GLUT_KEY_RIGHT]) current_time_ -= 10.0;
+    if (Keyboard::key['`'] ^ last_reverse) {
+        time_coefficient_ *= last_reverse ? 1 : -1;
+        last_reverse = Keyboard::key['`'];
+    }
+    
+    if (!pause) {
+        static double nextStatusUpdate = statusUpdateInterval;
+        nextStatusUpdate -= delta;
+        if (nextStatusUpdate < 0) {
+            printStatus();
+            nextStatusUpdate = statusUpdateInterval;            
+        }
+        current_time_ += delta * time_coefficient_;
+        if (current_time_ > end_time_) {
+            current_time_ = 0;
+        } else if (current_time_ < 0) {
+            current_time_ = end_time_;
+        }
+    }
 }
 
 void Scene::Draw() const {
     glMatrixMode(GL_MODELVIEW);    
     glLoadIdentity();
     glTranslated(-camera_.x, -camera_.y, -camera_.z);
-    for (unsigned int i = 0; i < links_.size(); ++i) {
+    for (map<pair<int, int>, Link*>::const_iterator it = links_.begin();
+            it != links_.end(); ++it) {
         glPushMatrix();
-        links_[i]->Draw();
+        it->second->Draw(current_time_);
         glPopMatrix();
     }
 

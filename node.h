@@ -14,6 +14,7 @@ class Node {
     void setTag(const std::string&);   
     const Vector3& getLocation() const;
     void setLocation(const Vector3&);
+    void setExtent(const Vector3& extent);
 
     void Draw() const;
   private:
@@ -21,6 +22,7 @@ class Node {
     Node& operator=(const Node&);
     std::string tag_;
     Vector3 location_;
+    Vector3 extent_;
     const int id_;
 };
 
