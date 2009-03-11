@@ -44,8 +44,8 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
 mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES =
 PROGRAMS = $(noinst_PROGRAMS)
-am_snam_OBJECTS = main.$(OBJEXT) scene.$(OBJEXT) mouse.$(OBJEXT) \
-	node.$(OBJEXT) vector3.$(OBJEXT)
+am_snam_OBJECTS = main.$(OBJEXT) scene.$(OBJEXT) link.$(OBJEXT) \
+	node.$(OBJEXT) mouse.$(OBJEXT) vector3.$(OBJEXT)
 snam_OBJECTS = $(am_snam_OBJECTS)
 snam_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@
@@ -165,8 +165,9 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-snam_SOURCES = main.cc scene.cc scene.h mouse.h mouse.cc\
-               node.cc node.h vector3.cc vector3.h
+snam_SOURCES = main.cc scene.cc scene.h \
+               link.cc link.h node.cc node.h \
+               mouse.h mouse.cc vector3.cc vector3.h
 
 all: all-am
 
@@ -218,6 +219,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/link.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mouse.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/node.Po@am__quote@

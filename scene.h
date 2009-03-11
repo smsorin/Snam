@@ -7,6 +7,7 @@
 #include <vector>
 
 class Node;
+class Link;
 
 class Scene {
   public:
@@ -20,7 +21,7 @@ class Scene {
     Vector3 camera_;
 
     std::vector<Node*> nodes_;
-
+    std::vector<Link*> links_;
     Scene(const Scene&);
     Scene& operator=(const Scene&);
 };

@@ -2,6 +2,7 @@
 
 #include "scene.h"
 #include "node.h"
+#include "link.h"
 #include "mouse.h"
 #include <GL/gl.h>
 #include <GL/glut.h>
@@ -10,6 +11,9 @@
 Scene::Scene() {
     // Testing 
     nodes_.push_back(new Node());
+    nodes_.push_back(new Node());
+    nodes_[1]->setLocation(Vector3(5,5,0));
+    links_.push_back(new Link(*nodes_[0], *nodes_[1]));
     camera_ = Vector3(0,0, 10);
 }
 
@@ -50,6 +54,12 @@ void Scene::Draw() const {
     glMatrixMode(GL_MODELVIEW);    
     glLoadIdentity();
     glTranslated(-camera_.x, -camera_.y, -camera_.z);
+    for (unsigned int i = 0; i < links_.size(); ++i) {
+        glPushMatrix();
+        links_[i]->Draw();
+        glPopMatrix();
+    }
+
     for (unsigned int i = 0; i < nodes_.size(); ++i) {
         glPushMatrix();
         nodes_[i]->Draw();

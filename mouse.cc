@@ -9,7 +9,7 @@
     #define GLUT_WHEEL_DOWN 4
 #endif
 
-Vector3 Mouse::pos(0,0,0), Mouse::left_drag_pos_start(0,0,0);
+Vector3 Mouse::pos(0,0,0);
 bool Mouse::left = false, Mouse::middle = false, Mouse::right = false;
 
 void Mouse::Button (int button, int state, int x, int y) {
