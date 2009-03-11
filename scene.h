@@ -5,13 +5,16 @@
 
 #include "vector3.h"
 #include <vector>
+#include <map>
 
 class Node;
 class Link;
+class Layout;
 
 class Scene {
   public:
     Scene(const std::string& fileName);
+    ~Scene();
     const Vector3& getCamera() const;
     void setCamera(const Vector3&);
 
@@ -20,7 +23,8 @@ class Scene {
   private:
     Vector3 camera_;
 
-    std::vector<Node*> nodes_;
+    Layout* layout_;
+    std::map<int, Node*> nodes_;
     std::vector<Link*> links_;
 
     void LoadGraph(const std::string&);

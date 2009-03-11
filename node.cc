@@ -3,9 +3,7 @@
 #include "node.h"
 #include <GL/gl.h>
 
-int Node::id_count_ = 0;
-
-Node::Node() : id_(id_count_++) {
+Node::Node(int id) : id_(id) {
 }
 
 int Node::getId() const { return id_; }
@@ -18,6 +16,7 @@ void Node::setLocation(const Vector3& new_location) { location_ = new_location; 
 void Node::Draw() const {
     glColor3d(1,0,0);
     glTranslated(location_.x, location_.y, location_.z);
+    glScaled(0.25, 0.25, 0.25);
     static float box[] = {-1, -1, 0,
                            1, -1, 0,
                            1,  1, 0,

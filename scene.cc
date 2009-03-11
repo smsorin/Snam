@@ -4,19 +4,31 @@
 #include "node.h"
 #include "link.h"
 #include "mouse.h"
+#include "layout.h"
 #include <GL/gl.h>
 #include <GL/glut.h>
 #include <cmath>
 
 Scene::Scene(const std::string& fileName) {
     LoadGraph(fileName);
+    layout_ = new Layout();
+    layout_->setNodes(nodes_);
+    layout_->setLinks(links_);
+    layout_->recompute();
+}
 
-    // Testing 
-    nodes_.push_back(new Node());
-    nodes_.push_back(new Node());
-    nodes_[1]->setLocation(Vector3(5,5,0));
-    links_.push_back(new Link(*nodes_[0], *nodes_[1]));
-    camera_ = Vector3(0,0, 10);
+Scene::~Scene() {
+    delete layout_;
+    layout_ = NULL;
+    for (unsigned int i = 0; i < links_.size(); ++i) {
+        delete links_[i];
+    }
+    links_.clear();
+    for (std::map<int, Node*>::iterator it = nodes_.begin();
+            it != nodes_.end(); ++it) {
+        delete it->second;
+    }
+    nodes_.clear();
 }
 
 const Vector3& Scene::getCamera() const { return camera_; }
@@ -62,9 +74,10 @@ void Scene::Draw() const {
         glPopMatrix();
     }
 
-    for (unsigned int i = 0; i < nodes_.size(); ++i) {
+    for (std::map<int, Node*>::const_iterator it = nodes_.begin();
+         it != nodes_.end(); ++it) {
         glPushMatrix();
-        nodes_[i]->Draw();
+        (it->second)->Draw();
         glPopMatrix();
     }
 }

@@ -16,6 +16,11 @@ class Link {
     const Node& getTo() const;
 
     void Draw() const;
+    
+    /* control Points mentance */
+    void updateGeometry();
+    void clearControlPoints();
+    void addControlPoint(const Vector3&);
   private:          
     Link(const Link&);
     Link& operator=(const Link&);

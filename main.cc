@@ -49,7 +49,7 @@ void Idle() {
 
 int main(int argc, char **argv) {
     for (int i = 0; i < argc - 1; i++) {
-        if (strcmp(argv[i], "--file")) {
+        if (strcmp(argv[i], "--file") == 0) {
             sceneName = argv[i + 1];
         }
     }  

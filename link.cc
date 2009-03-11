@@ -11,7 +11,10 @@ Link::Link(const Node& from, const Node& to)
 }
 
 Link::~Link() {
-    if (geometry) delete[] geometry;
+    if (geometry) {
+        delete[] geometry;
+        geometry = NULL;
+    }
 }
 
 const Node& Link::getFrom() const { return from_; }
@@ -27,9 +30,12 @@ void Link::Draw() const {
 }
 
 void Link::generateGeometry() const {
-    static const double link_width = 0.05;
+    static const double link_width = 0.005;
     const int count = controlPoints.size();
-    if (geometry) delete[] geometry;
+    if (geometry) {
+        delete[] geometry;
+        geometry = NULL;
+    }
     geometry = new float[3*2*count];
     static const Vector3 up(0,0,1);
     Vector3 dir = (controlPoints[1] - controlPoints[0]).Normalize();
@@ -53,4 +59,37 @@ void Link::setGeometryVertex(int pos, const Vector3& loc) const {
     geometry[pos * 3 + 0] = loc.x;
     geometry[pos * 3 + 1] = loc.y;
     geometry[pos * 3 + 2] = loc.z;
+}
+
+void Link::clearControlPoints() {
+    if (geometry) {
+        delete[] geometry;
+        geometry = NULL;
+    }
+    controlPoints.clear();
+}
+
+void Link::addControlPoint(const Vector3& newPoint) {
+    controlPoints.push_back(newPoint);
+}
+
+void Link::updateGeometry() {
+    if (geometry) {
+        delete[] geometry;
+        geometry = NULL;
+    }
+    for (int iteration = 0; iteration < 4; iteration++) {
+        std::vector<Vector3> points;
+        points.push_back(controlPoints[0]);
+        for (unsigned int i = 1; i < controlPoints.size() - 1; ++i) {
+            const Vector3& prev = controlPoints[i - 1];
+            const Vector3& curent = controlPoints[i];
+            const Vector3& next = controlPoints[i + 1];
+            points.push_back(prev/3.0 + curent*(2.0/3.0));
+            points.push_back(curent/3.0 + next*(2.0/3.0));
+        }
+        points.push_back(controlPoints[controlPoints.size() - 1]);
+        controlPoints = points;
+    }
+    generateGeometry();
 }

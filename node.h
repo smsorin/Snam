@@ -8,7 +8,7 @@
 
 class Node {
   public:
-    Node();
+    Node(int id);
     int getId() const;
     const std::string& getTag() const;
     void setTag(const std::string&);   
@@ -19,10 +19,9 @@ class Node {
   private:
     Node(const Node&);
     Node& operator=(const Node&);
-    int id_;
     std::string tag_;
     Vector3 location_;
-    static int id_count_;
+    const int id_;
 };
 
 #endif  // __NODE_H__
