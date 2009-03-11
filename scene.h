@@ -11,7 +11,7 @@ class Link;
 
 class Scene {
   public:
-    Scene();
+    Scene(const std::string& fileName);
     const Vector3& getCamera() const;
     void setCamera(const Vector3&);
 
@@ -22,6 +22,12 @@ class Scene {
 
     std::vector<Node*> nodes_;
     std::vector<Link*> links_;
+
+    void LoadGraph(const std::string&);
+    const std::vector<std::string> Tokenize(const std::string&);
+    void registerNode(const std::vector<std::string>&);
+    void registerLink(const std::vector<std::string>&);
+    void processLine(const std::string&);
     Scene(const Scene&);
     Scene& operator=(const Scene&);
 };

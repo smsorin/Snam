@@ -8,7 +8,9 @@
 #include <GL/glut.h>
 #include <cmath>
 
-Scene::Scene() {
+Scene::Scene(const std::string& fileName) {
+    LoadGraph(fileName);
+
     // Testing 
     nodes_.push_back(new Node());
     nodes_.push_back(new Node());

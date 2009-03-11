@@ -7,8 +7,11 @@
 #include "scene.h"
 #include "mouse.h"
 #include <cstdio>
+#include <string>
+#include <cstring>
 
 Scene* scene;
+std::string sceneName;
 
 void Init() {
     printf("Initializing...");
@@ -43,7 +46,17 @@ void Idle() {
         glutSwapBuffers();
     }    
 }
+
 int main(int argc, char **argv) {
+    for (int i = 0; i < argc - 1; i++) {
+        if (strcmp(argv[i], "--file")) {
+            sceneName = argv[i + 1];
+        }
+    }  
+    if (sceneName == "") {
+        printf("Error: Missing --file Parameter\n");
+        return -1;
+    } 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(800, 600);
@@ -59,7 +72,7 @@ int main(int argc, char **argv) {
     glutDisplayFunc(Idle);
     Init();
 
-    scene = new Scene();    
+    scene = new Scene(sceneName);    
     glutMainLoop();
     delete scene;
     return 0;
