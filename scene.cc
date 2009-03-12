@@ -24,6 +24,23 @@ Scene::Scene(const std::string& fileName) {
     layout_->setNodes(nodes_);
     layout_->setLinks(links_);
     layout_->recompute();
+
+    Vector3 min, max;
+    min= max = nodes_.begin()->second->getLocation();
+    for (map<int, Node*>::const_iterator it = nodes_.begin();
+            it != nodes_.end(); ++it) {
+       const Vector3& loc = it->second->getLocation(); 
+       if (loc.x < min.x) min.x = loc.x;
+       else if (loc.x > max.x) max.x = loc.x;
+       if (loc.y < min.y) min.y = loc.y;
+       else if (loc.y > max.y) max.y = loc.y;
+       if (loc.z < min.z) min.z = loc.z;
+       else if (loc.z > max.z) max.z = loc.z;
+    }
+    camera_ = (min + max) / 2;
+    Vector3 area = max - min;
+    if (area.x > area.y) camera_.z = area.x;
+    else camera_.z = area.y;
 }
 
 Scene::~Scene() {

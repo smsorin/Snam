@@ -89,6 +89,11 @@ Vector3& operator*=(Vector3& lhs, double rhs) {
 	return lhs;
 }
 
+
+bool operator!=(const Vector3& lhs, const Vector3& rhs) {
+    return !(lhs==rhs);
+}
+
 std::ostream& operator<<(std::ostream& out, const Vector3& rhs) {
 	out << rhs.x << ", " << rhs.y << ", " << rhs.z ;
 	return out;

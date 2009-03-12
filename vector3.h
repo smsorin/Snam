@@ -30,6 +30,7 @@ Vector3& operator/=(Vector3& lhs, double rhs);
 Vector3& operator+=(Vector3& lhs, const Vector3& rhs);
 Vector3& operator-=(Vector3& lhs, const Vector3& rhs);
 Vector3& operator*=(Vector3& lhs, double rhs);
+bool operator!=(const Vector3& lhs, const Vector3& rhs);
 std::ostream& operator<<(std::ostream& out, const Vector3& rhs);
 
 #endif  // __VECTOR3_H__

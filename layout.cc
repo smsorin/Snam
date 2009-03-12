@@ -26,7 +26,7 @@ void Layout::recompute() {
     delete[] aux; aux = NULL;
     writeDotFile(fileName);
     char command [256];
-    sprintf(command, "dot -Tplain -o%s %s",
+    sprintf(command, "neato -Tplain -o%s %s",
             (fileName + ".out").c_str(),
             fileName.c_str());
     if (system(command)) {
@@ -98,7 +98,16 @@ void Layout::writeDotFile(const std::string& fileName) const {
         printf("Error: Cannot open temporary file to write the graph!\n");
         return;
     }
-    fprintf(f, "graph {\n");
+    fprintf(f, "graph { graph[splines=true] \n");
+    for (std::map<int, Node*>::const_iterator it = 
+            nodes_.begin(); it != nodes_.end(); ++it) {
+        const Vector3& location = it->second->getLocation();
+        if (location != Vector3(0.0, 0.0, 0.0)) {
+            fprintf(f, "%d [ pos = \"%lf, %lf\" ];\n", 
+                    it->first, location.x, location.y);
+        } 
+    }
+    fprintf(f," edge [dir=none, arrowhead=none]; ");
     for (std::map<std::pair<int, int>, Link*>::const_iterator it = 
             links_.begin(); it != links_.end(); ++it) {
         fprintf(f, "  %d -- %d ;\n",
