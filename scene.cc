@@ -42,10 +42,10 @@ Scene::~Scene() {
 }
 
 const Vector3& Scene::getCamera() const { return camera_; }
-
-void Scene::setCamera(const Vector3& newPos) {
-    camera_ = newPos;
-}
+void Scene::setCamera(const Vector3& newPos) { camera_ = newPos; }
+const map<pair<int, int>, Link*>& Scene::getLinks() const { return links_; }
+double Scene::getEndTime() const { return end_time_; }
+double Scene::getTime() const { return current_time_; }
 
 void Scene::printStatus() const {
     printf("%s current time: %lf speed: %lf \n",(pause? "paused" : "playing"),

@@ -35,7 +35,7 @@ void Layout::recompute() {
     }
     remove(fileName.c_str());
     readGraphVizOutput(fileName + ".out");
-    remove((fileName+".out").c_str());
+   // remove((fileName+".out").c_str());
     for (std::map<std::pair<int, int>, Link*>::iterator it = links_.begin();
             it != links_.end(); ++it) {
         it->second->updateGeometry();

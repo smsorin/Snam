@@ -44,10 +44,12 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
 mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES =
 PROGRAMS = $(noinst_PROGRAMS)
-am_snam_OBJECTS = main.$(OBJEXT) scene.$(OBJEXT) \
+am_snam_OBJECTS = main.$(OBJEXT) hud.$(OBJEXT) \
+	densitytimeline.$(OBJEXT) scene.$(OBJEXT) \
 	scene_loadgraph.$(OBJEXT) layout.$(OBJEXT) link.$(OBJEXT) \
 	node.$(OBJEXT) message.$(OBJEXT) mouse.$(OBJEXT) \
-	keyboard.$(OBJEXT) consts.$(OBJEXT) vector3.$(OBJEXT)
+	keyboard.$(OBJEXT) consts.$(OBJEXT) vector3.$(OBJEXT) \
+	widget.$(OBJEXT)
 snam_OBJECTS = $(am_snam_OBJECTS)
 snam_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@
@@ -167,11 +169,13 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-snam_SOURCES = main.cc scene.cc scene_loadgraph.cc scene.h \
+snam_SOURCES = main.cc hud.cc hud.h densitytimeline.h densitytimeline.cc \
+               scene.cc scene_loadgraph.cc scene.h \
                layout.cc layout.h \
                link.cc link.h node.cc node.h message.cc message.h\
                mouse.h mouse.cc keyboard.cc keyboard.h \
-               consts.h consts.cc vector3.cc vector3.h 
+               consts.h consts.cc vector3.cc vector3.h \
+               widget.cc widget.h
 
 all: all-am
 
@@ -224,6 +228,8 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/consts.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/densitytimeline.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hud.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/keyboard.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/layout.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/link.Po@am__quote@
@@ -234,6 +240,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scene.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scene_loadgraph.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vector3.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/widget.Po@am__quote@
 
 .cc.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

@@ -31,6 +31,10 @@ class Link {
     /* message members */
     void addForwardMessage(const Message&);
     void addReverseMessage(const Message&);
+    const std::multiset<Message>& getForwardStream() const;
+    const std::multiset<Message>& getReverseStream() const;   
+
+    double getFlyTime(const Message&) const;
   private:          
     Link(const Link&);
     Link& operator=(const Link&);

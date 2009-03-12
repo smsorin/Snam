@@ -17,11 +17,14 @@ class Scene {
     ~Scene();
     const Vector3& getCamera() const;
     void setCamera(const Vector3&);
+    const std::map<std::pair<int, int>, Link*>& getLinks() const;
 
     void Tick(double delta);
     void Draw() const;
 
     void printStatus() const;    
+    double getEndTime() const;
+    double getTime() const;
   private:
     Vector3 camera_;
     double current_time_;

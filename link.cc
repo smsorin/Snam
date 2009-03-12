@@ -30,10 +30,14 @@ void Link::Draw(double time) const {
     if (!geometry) generateGeometry();
     glColor3d(0.0, 1.0, 0.0);
     glEnableClientState(GL_VERTEX_ARRAY);
-    glVertexPointer(3, GL_FLOAT, 0, geometry);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, controlPoints.size() * 2);
+    glEnable(GL_LINE_SMOOTH);
+    glLineWidth(5);
+    glVertexPointer(3, GL_FLOAT, 0, geometry);    
+    glDrawArrays(GL_LINE_STRIP, 0, controlPoints.size() );
     glDisableClientState(GL_VERTEX_ARRAY);
-
+    glDisable(GL_LINE_SMOOTH);
+    
+    glColor3d(0.0, 0.1, 0.8);
     Message helper(time - delay_, 0);
     for (std::multiset<Message>::const_iterator it =
             forward_stream.upper_bound(helper); 
@@ -89,28 +93,30 @@ void Link::generateGeometry() const {
         delete[] geometry;
         geometry = NULL;
     }
-    geometry = new float[3*2*count];
+    geometry = new float[3*count];
     run_length.clear();
     run_length.push_back(0);
     length_ = 0;
     static const Vector3 up(0,0,1);
     Vector3 dir = (controlPoints[1] - controlPoints[0]).Normalize();
     Vector3 left = dir.Cross(up).Normalize() * link_width; 
-    setGeometryVertex(0, controlPoints[0] + left);
-    setGeometryVertex(1, controlPoints[0] - left);
+    setGeometryVertex(0, controlPoints[0]);// + left);
+//    setGeometryVertex(1, controlPoints[0] - left);
     for (int i = 1; i < count - 1; ++i) {
         length_ += (controlPoints[i] - controlPoints[i - 1]).Length();
         run_length.push_back(length_);
         dir = (controlPoints[i + 1] - controlPoints[i - 1]).Normalize();
         left = dir.Cross(up).Normalize() * link_width; 
-        setGeometryVertex(i * 2, controlPoints[i] + left);
-        setGeometryVertex(i * 2 +1, controlPoints[i] - left);
+        setGeometryVertex(i , controlPoints[i] );
+//        setGeometryVertex(i * 2, controlPoints[i] + left);
+//        setGeometryVertex(i * 2 +1, controlPoints[i] - left);
     }
     // last one
     dir = (controlPoints[count - 1] - controlPoints[count - 2]).Normalize();
     left = dir.Cross(up).Normalize() * link_width;
-    setGeometryVertex(count *2 - 2, controlPoints[count - 1] + left);
-    setGeometryVertex(count *2 - 1, controlPoints[count - 1] - left);
+    setGeometryVertex(count - 1, controlPoints[count - 1]);
+//    setGeometryVertex(count *2 - 2, controlPoints[count - 1] + left);
+//    setGeometryVertex(count *2 - 1, controlPoints[count - 1] - left);
     length_ += (controlPoints[count - 1] - controlPoints[count - 2]).Length();
     run_length.push_back(length_);
 }
@@ -160,4 +166,17 @@ void Link::addForwardMessage(const Message& msg) {
 
 void Link::addReverseMessage(const Message& msg) {
     reverse_stream.insert(msg);
+}
+
+const std::multiset<Message>& Link::getForwardStream() const {
+    return forward_stream;
+}
+
+const std::multiset<Message>& Link::getReverseStream() const {
+    return reverse_stream;
+}
+
+double Link::getFlyTime(const Message&) const {
+    // Currently only delay is taken into account
+    return delay_;
 }

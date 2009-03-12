@@ -5,6 +5,7 @@
 #include <sys/time.h>
 
 #include "scene.h"
+#include "hud.h"
 #include "mouse.h"
 #include "keyboard.h"
 #include <cstdio>
@@ -12,6 +13,7 @@
 #include <cstring>
 
 Scene* scene;
+Hud* hud;
 std::string sceneName;
 
 void Init() {
@@ -40,12 +42,15 @@ void Idle() {
     else time_diff = (current_time.tv_sec - last_time.tv_sec) +
             ((double)current_time.tv_usec - last_time.tv_usec) / 1000000.0;
     last_time = current_time;
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     if (scene != NULL) {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         scene->Tick(time_diff);
         scene->Draw();
-        glutSwapBuffers();
     }    
+    if (hud != NULL)
+        hud ->Draw();
+
+    glutSwapBuffers();
 }
 
 int main(int argc, char **argv) {
@@ -73,8 +78,10 @@ int main(int argc, char **argv) {
     glutDisplayFunc(Idle);
     Init();
 
-    scene = new Scene(sceneName);    
+    scene = new Scene(sceneName);
+    hud = new Hud(*scene);
     glutMainLoop();
     delete scene;
+    delete hud;
     return 0;
 }
