@@ -2,9 +2,8 @@
 
 #include "link.h"
 #include "node.h"
-#include <OpenGL/gl.h>
-#include <GLUT/glut.h>
 #include "consts.h"
+#include "config.h"
 
 Link::Link(const Node& from, const Node& to)
     : from_(from), to_(to), geometry(NULL) {

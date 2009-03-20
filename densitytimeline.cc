@@ -5,11 +5,10 @@
 #include "scene.h"
 #include "message.h"
 #include "link.h"
-#include <OpenGL/glu.h>
-#include <GLUT/glut.h>
 #include <map>
 #include <cmath>
 #include <cstdio>
+#include "config.h"
 
 using std::map;
 using std::pair;

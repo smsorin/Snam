@@ -1,8 +1,7 @@
 /* Copyright 2009 Sorin Stancu-Mara */
 
 #include "node.h"
-#include <OpenGL/gl.h>
-#include <GLUT/glut.h>
+#include "config.h"
 
 Node::Node(int id) : id_(id), extent_(1.0, 1.0, 1.0) {
 }

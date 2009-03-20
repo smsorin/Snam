@@ -7,9 +7,8 @@
 #include "layout.h"
 #include "consts.h"
 #include "keyboard.h"
-#include <OpenGL/gl.h>
-#include <GLUT/glut.h>
 #include <cmath>
+#include "config.h"
 
 using std::map;
 using std::pair;

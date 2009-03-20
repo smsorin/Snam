@@ -6,7 +6,6 @@
 #include "widget.h"
 #include "scene.h"
 #include <set>
-#include <OpenGL/gl.h>
 
 class Message;
 class Link;
@@ -19,7 +18,7 @@ class DensityTimeLine : public Widget {
     void index(const std::multiset<Message>& msgs, int* buckets,
             double bucketSize, const Link& link);
     void generateTexture(int* buckets);
-    GLuint texture;
+    unsigned int texture;
     const Scene& scene_;
 };
 
