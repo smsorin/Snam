@@ -17,7 +17,7 @@ using std::multiset;
 DensityTimeLine::DensityTimeLine(const Scene& scene) : scene_(scene) {
     int* buckets = new int[densityLineResolution];
     for (int  i = 0; i < densityLineResolution; i++) buckets[i] = 0;
-    double bucketSize = scene.getEndTime() / densityLineResolution;
+    double bucketSize = scene.getEndTime() / glutGet(GLUT_WINDOW_WIDTH);
     for (map<pair<int, int>, Link*>::const_iterator it =
             scene.getLinks().begin(); it != scene.getLinks().end(); ++it) {
         const multiset<Message>& msgs = it->second->getForwardStream();
@@ -63,12 +63,12 @@ void DensityTimeLine::Draw() const {
 
 void DensityTimeLine::index(const multiset<Message>& msgs, int* buckets,
         double bucketSize, const Link& link) {
-
+    int width = glutGet(GLUT_WINDOW_WIDTH);
     for (multiset<Message>::const_iterator it = msgs.begin(); 
             it != msgs.end(); ++it) {
         int pos = trunc(it->sendTime / bucketSize);
         double left = link.getFlyTime(*it);
-        while (pos < densityLineResolution && left > 0) {
+        while (pos < width && left > 0) {
             buckets[pos++]++;
             left -= bucketSize;
         } 
@@ -76,40 +76,37 @@ void DensityTimeLine::index(const multiset<Message>& msgs, int* buckets,
 }
 
 void DensityTimeLine::generateTexture(int* buckets) {
-    unsigned char* data = new unsigned char[densityLineResolution * 
-                                            densityLineResolution * 4];
     int min, max;
+    int width = glutGet(GLUT_WINDOW_WIDTH);
+    int height = width;
+    unsigned char* data = new unsigned char[width * 
+                                            height * 4];
     min = max = buckets[0];
-    for (int i = 1; i < densityLineResolution; ++i) {
+    for (int i = 1; i < width; ++i) {
         if (buckets[i] > max) max = buckets[i];
         else if (buckets[i] < min) min = buckets[i];
     }
-
-    for (int i = 0; i < densityLineResolution; ++i) {
-        int level = densityLineResolution * (buckets[i] - min) / (max - min);
-        
+    for (int i = 0; i < width; ++i) {
+        int level = height * (((double)buckets[i] - min) / (max - min));
         for (int j = 0; j < level; ++j) {
-            data[(i*densityLineResolution+j) * 4 + 0] = densityLineFillColorRed;
-            data[(i*densityLineResolution+j) * 4 + 1] = 
-                densityLineFillColorGreen;
-            data[(i*densityLineResolution+j) * 4 + 2] = 
-                densityLineFillColorBlue;
-            data[(i*densityLineResolution+j) * 4 + 3] = hudTransparency;
+            data[(i*width+j) * 4 + 0] = densityLineFillColorRed;
+            data[(i*width+j) * 4 + 1] = densityLineFillColorGreen;
+            data[(i*width+j) * 4 + 2] = densityLineFillColorBlue;
+            data[(i*width+j) * 4 + 3] = hudTransparency;
         }
-        for (int j = level + 1; j < densityLineResolution; ++j) {
-            data[(i*densityLineResolution+j) * 4 + 0] = 0;
-            data[(i*densityLineResolution+j) * 4 + 1] = 0;
-            data[(i*densityLineResolution+j) * 4 + 2] = 0;
-            data[(i*densityLineResolution+j) * 4 + 3] = 0;  // Alpha
+        for (int j = level + 1; j < height; ++j) {
+            data[(i*width+j) * 4 + 0] = 0;
+            data[(i*width+j) * 4 + 1] = 0;
+            data[(i*width+j) * 4 + 2] = 0;
+            data[(i*width+j) * 4 + 3] = 0;  // Alpha
         }
     }
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,                    
-                    GL_NEAREST_MIPMAP_NEAREST);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     gluBuild2DMipmaps(GL_TEXTURE_2D, 4,
-                      densityLineResolution, densityLineResolution,
+                      width, height,
                       GL_RGBA, GL_UNSIGNED_BYTE, data);
     delete data;
 }
