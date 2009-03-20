@@ -1,7 +1,7 @@
 /* Copyright 2009 Sorin Stancu-Mara */
 
 #include "mouse.h"
-#include <GL/glut.h>
+#include <GLUT/glut.h>
 #include <cstdio>
 
 #ifndef GLUT_WHEEL_UP

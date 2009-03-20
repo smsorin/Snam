@@ -6,7 +6,7 @@
 #include "widget.h"
 #include "scene.h"
 #include <set>
-#include <GL/gl.h>
+#include <OpenGL/gl.h>
 
 class Message;
 class Link;

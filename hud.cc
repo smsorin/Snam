@@ -4,9 +4,9 @@
 #include "scene.h"
 #include "widget.h"
 #include "densitytimeline.h"
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glut.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include <GLUT/glut.h>
 
 Hud::Hud(const Scene& scene) {
     widgets_.push_back( new DensityTimeLine(scene) );

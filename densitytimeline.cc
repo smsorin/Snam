@@ -5,8 +5,8 @@
 #include "scene.h"
 #include "message.h"
 #include "link.h"
-#include <GL/glu.h>
-#include <GL/glut.h>
+#include <OpenGL/glu.h>
+#include <GLUT/glut.h>
 #include <map>
 #include <cmath>
 #include <cstdio>

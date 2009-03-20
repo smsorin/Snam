@@ -1,8 +1,8 @@
 /* Copyright 2009 Sorin Stancu-Mara */
 
 #include "node.h"
-#include <GL/gl.h>
-#include <GL/glut.h>
+#include <OpenGL/gl.h>
+#include <GLUT/glut.h>
 
 Node::Node(int id) : id_(id), extent_(1.0, 1.0, 1.0) {
 }
@@ -19,5 +19,6 @@ void Node::Draw() const {
     glColor3d(1,0,0);
     glTranslated(location_.x, location_.y, location_.z);
     glScaled(extent_.x, extent_.y, extent_.z);
+    glScaled(0.1,0.1,1);
     glutSolidSphere(.5, 36, 5);
 }

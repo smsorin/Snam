@@ -29,8 +29,10 @@ void Layout::recompute() {
     sprintf(command, "neato -Tplain -o%s %s",
             (fileName + ".out").c_str(),
             fileName.c_str());
+    fprintf(stderr, "%s", command);
     if (system(command)) {
         printf("Error: The layout engine didn't worked!\n");        
+	perror("system");
         return;
     }
     remove(fileName.c_str());

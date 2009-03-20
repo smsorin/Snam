@@ -1,7 +1,7 @@
 /* Copyright 2009 Sorin Stancu-Mara */
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glut.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include <GLUT/glut.h>
 #include <sys/time.h>
 
 #include "scene.h"

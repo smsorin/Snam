@@ -2,8 +2,8 @@
 
 #include "link.h"
 #include "node.h"
-#include <GL/gl.h>
-#include <GL/glut.h>
+#include <OpenGL/gl.h>
+#include <GLUT/glut.h>
 #include "consts.h"
 
 Link::Link(const Node& from, const Node& to)
@@ -28,7 +28,7 @@ void Link::setDelay(double delay) { delay_ = delay; }
 
 void Link::Draw(double time) const {
     if (!geometry) generateGeometry();
-    glColor3d(0.0, 1.0, 0.0);
+    glColor3d(0.0, 0.0, 0.0);
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnable(GL_LINE_SMOOTH);
     glLineWidth(5);
@@ -37,7 +37,7 @@ void Link::Draw(double time) const {
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisable(GL_LINE_SMOOTH);
     
-    glColor3d(0.0, 0.1, 0.8);
+    glColor3d(0.3, 0.5, 0.8);
     Message helper(time - delay_, 0);
     for (std::multiset<Message>::const_iterator it =
             forward_stream.upper_bound(helper); 

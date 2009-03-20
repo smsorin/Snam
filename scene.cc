@@ -7,8 +7,8 @@
 #include "layout.h"
 #include "consts.h"
 #include "keyboard.h"
-#include <GL/gl.h>
-#include <GL/glut.h>
+#include <OpenGL/gl.h>
+#include <GLUT/glut.h>
 #include <cmath>
 
 using std::map;
